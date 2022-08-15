@@ -1,3 +1,6 @@
+
+type = "text/javascript"
+
 // FUNCTION - RÉCUPÉRATION DES PRODUITS DEPUIS L'API
 function getArticles() {
     fetch("http://localhost:3000/api/products")
@@ -22,16 +25,17 @@ function getArticles() {
             .querySelector("#items");
         // BOUCLE POUR RÉCUPÉRATION DE CHAQUE ARTICLE
         for (let article of index) {
-            sectionItems.innerHTML += <a href="./product.html?_id=${article._id}">
+            sectionItems.innerHTML += `<a href="./product.html?_id=${article._id}">
                 <article>
-                    <img scr="${article.imgUrl}" alt="${article.altTxt}" />
+                    <img scr="${article.imageUrl}" alt="${article.altTxt}" />
                     <h3 class="productName">${article.name}</h3>
                     <p class="productDescription">${article.description}</p>
                 </article>
-            </a>;
+            </a>`;
 
         }
 
     }
 
 }
+
