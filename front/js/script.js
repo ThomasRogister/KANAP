@@ -1,5 +1,4 @@
 
-type = "text/javascript"
 
 // FUNCTION - RÉCUPÉRATION DES PRODUITS DEPUIS L'API
 function getArticles() {
