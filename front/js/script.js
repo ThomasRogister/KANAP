@@ -7,9 +7,12 @@ function getArticles() {
         // DEMANDE DE RECEVOIR LA REPONSE EN J.SON
         .then((res) => res.json())
         // LA RÉPONSE JSON SERA APPELÉ "ARTICLES"
-        .then((articles) =>
+        .then((articles) => {
+            //RENVOIE DES INFORMATION ARTICLE DANS LA CONSOLE SOUS FORME DE TABLEAU
+            console.table(articles);
             //APPEL DE LA FUNCTION D'AFFICHAGE 
-            products(articles))
+            products(articles);
+        })
 
         // AFFICHAGE D'UN MESSAGE EN CAS D'ERREUR
         .catch((err) => {
@@ -36,6 +39,7 @@ function getArticles() {
         }
 
     }
-
 }
+
+
 
