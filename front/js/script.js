@@ -17,7 +17,7 @@ fetch("http://localhost:3000/api/products")
     .catch((err) => {
         document
             .querySelector("#items")
-            .innerHTML = "<h2>Ce site est en maintenance,<br> nous nous excusons pour la gêne occasionné.</h2>"
+            .innerHTML = "<h1> <strong>Ce site est en maintenance,</strong><br> nous nous excusons pour la gêne occasionné.</h1>"
         console.log("err + empêche la réponse de s'afficher")
 
     });
