@@ -16,10 +16,11 @@ fetch("http://localhost:3000/api/products")
     // AFFICHAGE D'UN MESSAGE EN CAS D'ERREUR
     .catch((err) => {
         document
-            .querySelector("#items")
+            .querySelector(".item")
             .innerHTML = `<h1> Ce site est en maintenance,</<br> nous nous excusons pour la gêne occasionné.</h1>`;
         console.log(err + "empêche la réponse de s'afficher");
     });
+
 
 // CREATION OBJET CLIENT
 let articleClient = {};
@@ -48,5 +49,7 @@ function products(article) {
         }
     }
     console.log("Affichage Ok");
-
 }
+
+
+
