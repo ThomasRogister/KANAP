@@ -48,9 +48,72 @@ function products(products) {
 
         }
     }
-
-
 }
+let articleClient = {};
+articleClient._id = id;
 
 
+let colorChoice = document.querySelector("#colors");
+colorChoice.addEventListener("input", (ec) => {
+    let colorProduct;
+    // RECUPERATION DE VALUE DE LA CIBLE(target) DANS (e)-#colors
+    colorProduct = ec.target.value;
+    // AJOUT DE LA COULEUR A OBJET PANIER CLIENT
+    articleClient.color = colorProduct;
+    //  RESET COULEUR ET TEXTE SI ACTION SUR LES INPUTS => COMMANDE DU MÊME ARTICLE
+    document.querySelector("#addToCart").style.color = "white";
+    document.querySelector("#addToCart").textContent = "Ajouter au panier";
+    console.log(colorProduct);
+});
 
+let quantityChoice = document.querySelector('input[id="quantity"]');
+let productQuantity;
+quantityChoice.addEventListener("input", (eq) => {
+    productQuantity = eq.target.value;
+    // AJOUT QUANTITE => OBJET PANIER CLIENT
+    articleClient.quantity = productQuantity;
+    //  RESET COULEUR ET TEXTE SI ACTION SUR LES INPUTS => COMMANDE DU MÊME ARTICLE
+    document.querySelector("#addToCart").style.color = "white";
+    document.querySelector("#addToCart").textContent = "Ajouter au panier";
+    console.log(productQuantity);
+})
+
+
+// CONDITION DE VALIDATION BTN "ajouter au panier"
+let productChoice = document.querySelector("#addToCart");
+productChoice.addEventListener("click", () => {
+    if (
+        articleClient.quantity < 1 ||
+        articleClient.quantity > 100 ||
+        articleClient.quantity === undefined ||
+        articleClient.color === "" ||
+        articleClient.color === undefined
+
+    ) {
+        // MESSAGE ALERTE
+        alert("Veuillez renseigner une putain de couleur et une quantité connard!!");
+    } else {
+        console.log("validation effectué");
+        document.querySelector("#addToCart").style.color = "rgb(0, 205, 0)";
+        document.querySelector("#addToCart").textContent = "Produit ajouté !";
+    }
+});
+
+// DECLARATION DES VARIABLES TABLEAUX
+// 1ER TABLEAU => INITIALISATION DU PANIER
+let productChoiceClient = [];
+// RECUPERATION DU LOCALSTORAGE EN JSON
+let productStored = [];
+// CHOIX ARTICLE NON PRESENT DANS LOCALSTORAGE
+let productTemporary = [];
+// TABLEAU "productStored + productTemporary"
+let productToPush = [];
+
+function firstProduct() {
+    console.log(productStored);
+    if (productStored === nul) {
+        productChoiceClient.push(articleClient);
+        console.log(articleClient);
+        return (localStorage.storedBasket = JSON.stringify(productChoiseClient));
+    }
+}
