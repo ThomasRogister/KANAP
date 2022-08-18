@@ -91,7 +91,7 @@ productChoice.addEventListener("click", () => {
 
     ) {
         // MESSAGE ALERTE
-        alert("Veuillez renseigner une putain de couleur et une quantité connard!!");
+        alert("Veuillez renseigner une couleur et une quantité");
     } else {
         console.log("validation effectué");
         document.querySelector("#addToCart").style.color = "rgb(0, 205, 0)";
