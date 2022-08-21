@@ -82,6 +82,7 @@ quantityChoice.addEventListener("input", (eq) => {
 // CONDITION DE VALIDATION BTN "ajouter au panier"
 let productChoice = document.querySelector("#addToCart");
 productChoice.addEventListener("click", () => {
+
     if (
         articleClient.quantity < 1 ||
         articleClient.quantity > 100 ||
@@ -96,6 +97,7 @@ productChoice.addEventListener("click", () => {
         console.log("validation effectué");
         document.querySelector("#addToCart").style.color = "rgb(0, 205, 0)";
         document.querySelector("#addToCart").textContent = "Produit ajouté !";
+        addNewProduct(articleClient);
     }
 });
 
@@ -120,25 +122,41 @@ function firstProduct() {
 
 // AJOUT NEW ARTICLE => "productTemporary"
 // INITIALISE ARTICLE A PUSH
-function addNewProduct() {
-    productToPush = [];
-    productTemporary.push(articleClient);
-    productToPush = [...productStored, ...productTemporary];
-    // TRI DES TABLEAUX OBJET https://www.azur-web.com/astuces/javascript-trier-tableau-objet
-    produitsAPousser.sort(function triage(a, b) {
-        if (a._id < b._id) return -1;
-        if (a._id > b._id) return 1;
-        if (a._id = b._id) {
-            if (a.couleur < b.couleur) return -1;
-            if (a.couleur > b.couleur) return 1;
+function addNewProduct(articleClient) {
+    const productStored = localStorage.getItem("storedBasket");
+    if (!productStored) {
+        const productToPush = [articleClient];
+        localStorage.setItem("storedBasket", JSON.stringify(productToPush));
+    }
+    else {
+        const productTemporary = JSON.parse(productStored);
+        if (productTemporary.find(i => articleClient.color === i.color && articleClient._id === i._id)) {
+            alert("article deja choisi.")
         }
-        return 0;
-    });
-    // INITIALISATION DE "productTemporary " APRES AVOIR ETE UTILISE
-    productTemporary = [];
-    // ENVOIE DU NEW ARTICLE => LOCALSTORAGE => "storedBasket" en JSON SRTINGIFY
-    return (localStorage.storedBasket = JSON.stringify(productToPush));
+        const newProducts = [...productTemporary, articleClient];
+        localStorage.setItem("storedBasket", JSON.stringify(newProducts));
+    }
 }
+
+
+
+// productTemporary.push(articleClient);
+// productToPush = [...productStored, ...productTemporary];
+// // TRI DES TABLEAUX OBJET https://www.azur-web.com/astuces/javascript-trier-tableau-objet
+// produitsAPousser.sort(function triage(a, b) {
+//     if (a._id < b._id) return -1;
+//     if (a._id > b._id) return 1;
+//     if (a._id = b._id) {
+//         if (a.couleur < b.couleur) return -1;
+//         if (a.couleur > b.couleur) return 1;
+//     }
+//     return 0;
+//     });
+//     // INITIALISATION DE "productTemporary " APRES AVOIR ETE UTILISE
+//     productTemporary = [];
+//     // ENVOIE DU NEW ARTICLE => LOCALSTORAGE => "storedBasket" en JSON SRTINGIFY
+//     return (localStorage.storedBasket = JSON.stringify(productToPush));
+
 
 // AJOUT D'UN MÊME ARTICLE DANS LE TABLEAU, ELSE=> AJOUT DU TABLEAU || CREATION TABLEAU FIRST ARTICLE
 function basket() {
@@ -146,7 +164,7 @@ function basket() {
     productStored = JSON.parse(localStorage.getItem("storedBasket"));
     if (productStored) {
         for (let choice of productStored) {
-            if (choice.id === id && choix.color === articleClient.color) {
+            if (choice.id === id && choice.color === articleClient.color) {
                 alert("Article déja choisit.");
                 let addQuantity = parseInt(choice.quantity) + parseInt(productQuantity);
                 // RESULTAT +> JSON
