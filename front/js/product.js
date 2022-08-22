@@ -113,7 +113,7 @@ let productToPush = [];
 
 function firstProduct() {
     console.log(productStored);
-    if (productStored === nul) {
+    if (productStored === null) {
         productChoiceClient.push(articleClient);
         console.log(articleClient);
         return (localStorage.storedBasket = JSON.stringify(productChoiseClient));
@@ -137,26 +137,6 @@ function addNewProduct(articleClient) {
         localStorage.setItem("storedBasket", JSON.stringify(newProducts));
     }
 }
-
-
-
-// productTemporary.push(articleClient);
-// productToPush = [...productStored, ...productTemporary];
-// // TRI DES TABLEAUX OBJET https://www.azur-web.com/astuces/javascript-trier-tableau-objet
-// produitsAPousser.sort(function triage(a, b) {
-//     if (a._id < b._id) return -1;
-//     if (a._id > b._id) return 1;
-//     if (a._id = b._id) {
-//         if (a.couleur < b.couleur) return -1;
-//         if (a.couleur > b.couleur) return 1;
-//     }
-//     return 0;
-//     });
-//     // INITIALISATION DE "productTemporary " APRES AVOIR ETE UTILISE
-//     productTemporary = [];
-//     // ENVOIE DU NEW ARTICLE => LOCALSTORAGE => "storedBasket" en JSON SRTINGIFY
-//     return (localStorage.storedBasket = JSON.stringify(productToPush));
-
 
 // AJOUT D'UN MÊME ARTICLE DANS LE TABLEAU, ELSE=> AJOUT DU TABLEAU || CREATION TABLEAU FIRST ARTICLE
 function basket() {
