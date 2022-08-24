@@ -24,7 +24,7 @@ fetch("http://localhost:3000/api/products")
 
 // FUNCTION - AFFICHAGE DES ARTICLES SUR L'INDEX.HTML
 function products(index) {
-    let sectionItems = document
+    const sectionItems = document
         .querySelector("#items");
     // BOUCLE POUR RÉCUPÉRATION DE CHAQUE ARTICLE
     for (let article of index) {

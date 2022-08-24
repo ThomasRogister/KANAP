@@ -48,7 +48,7 @@ function displayCartItem(article, objectArticles) {
           <p>Qté : </p>
           <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${article.quantity}">
         </div>
-        <div id="delete" class="cart__item__content__settings__delete">
+        <div id="delete" onclick="removeProduct('${article._id}')" class="cart__item__content__settings__delete">
           <p class="deleteItem">Supprimer</p>
         </div>
       </div>
@@ -56,12 +56,13 @@ function displayCartItem(article, objectArticles) {
   </article>`);
 }
 // Supprimer article du panier
-function removeProducts() {
-  const btnRemoveProduct = document.querySelector("#delete");
-  btnRemoveProduct.addEventListener("click", () => {
-    localStorage.clear(article);
-
-  });
+function removeProduct(id) {
+  alert(id);
+  const recupBasket = localStorage.getItem("storedBasket");
+  const basketItems = JSON.parse(recupBasket);
+  const newBasket = basketItems.filter(p => p._id !== id);
+  localStorage.setItem("storedBasket", JSON.stringify(newBasket));
+  location.reload();
 }
 
 
