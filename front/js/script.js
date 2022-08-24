@@ -39,5 +39,3 @@ function products(index) {
     }
 }
 
-
-

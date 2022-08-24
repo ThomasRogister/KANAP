@@ -30,7 +30,7 @@ if (basket.match("cart")) {
 function displayCartItem(article, objectArticles) {
   const result = objectArticles.find(p => p._id === article._id);
 
-
+  // affichage prix total des même articles
 
 
   document.querySelector("#cart__items").insertAdjacentHTML("beforeend", `<article class="cart__item" data-id="${article._id}" data-color="${article.color}">
@@ -48,13 +48,23 @@ function displayCartItem(article, objectArticles) {
           <p>Qté : </p>
           <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${article.quantity}">
         </div>
-        <div class="cart__item__content__settings__delete">
+        <div id="delete" class="cart__item__content__settings__delete">
           <p class="deleteItem">Supprimer</p>
         </div>
       </div>
     </div>
   </article>`);
 }
+// Supprimer article du panier
+function removeProducts() {
+  const btnRemoveProduct = document.querySelector("#delete");
+  btnRemoveProduct.addEventListener("click", () => {
+    localStorage.clear(article);
+
+  });
+}
+
+
 
 function showPriceAndQuantity(listLocalStorage, objectArticles) {
   let totalQuantity = 0;
