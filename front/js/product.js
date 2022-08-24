@@ -27,7 +27,7 @@ fetch("http://localhost:3000/api/products")
 // FUNCTION - AFFICHAGE PRODUIT
 function products(products) {
     // DECLARATION DES VARIABLE DES DIFFERENTS ELEMENTS
-    let image = document.querySelector("article div.item__img");
+    let image = document.querySelector(".item__img");
     let title = document.querySelector("#title");
     let price = document.querySelector("#price");
     let description = document.querySelector("#description");
@@ -36,7 +36,6 @@ function products(products) {
     const product = products.find(p => p._id === id);
     console.log(product)
     if (product) {
-        // console.log(product)
         image.innerHTML = `<img src="${product.imageUrl}"alt="${product.altTxt}">`;
         title.textContent = `${product.name}`;
         price.textContent = `${product.price}`;
@@ -56,7 +55,7 @@ articleClient._id = id;
 let colorChoice = document.querySelector("#colors");
 colorChoice.addEventListener("input", (ec) => {
     let colorProduct;
-    // RECUPERATION DE VALUE DE LA CIBLE(target) DANS (e)-#colors
+    // RECUPERATION DE VALUE DE LA CIBLE(target) DANS (ec)-#colors
     colorProduct = ec.target.value;
     // AJOUT DE LA COULEUR A OBJET PANIER CLIENT
     articleClient.color = colorProduct;
@@ -82,7 +81,6 @@ quantityChoice.addEventListener("input", (eq) => {
 // CONDITION DE VALIDATION BTN "ajouter au panier"
 let productChoice = document.querySelector("#addToCart");
 productChoice.addEventListener("click", () => {
-
     if (
         articleClient.quantity < 1 ||
         articleClient.quantity > 100 ||
