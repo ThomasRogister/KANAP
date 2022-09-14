@@ -1,41 +1,33 @@
-
-
-//  RÉCUPÉRATION DES PRODUITS DEPUIS L'API
-
+//récupération des produits depuis l'api
 fetch("http://localhost:3000/api/products")
-    // DEMANDE DE RECEVOIR LA REPONSE EN J.SON
+    //demande de recevoir la reponse en JSON
     .then((res) => res.json())
-    // LA RÉPONSE JSON SERA APPELÉ "ARTICLES"
+    //la répnse(JSON) sera appelé "articles"
     .then((articles) => {
-        //RENVOIE DES INFORMATION ARTICLE DANS LA CONSOLE SOUS FORME DE TABLEAU
         console.table(articles);
-        //APPEL DE LA FUNCTION D'AFFICHAGE 
+        // appel de la function d'affichage
         products(articles);
     })
 
-    // AFFICHAGE D'UN MESSAGE EN CAS D'ERREUR
+    //affichage en cas d'erreur
     .catch((err) => {
         document
             .querySelector("#items")
-            .innerHTML = `<h1> <strong>Ce site est en maintenance,<br> nous nous excusons pour la gêne occasionné.</h1>`
-        console.log(err + "empêche la réponse de s'afficher")
-
+            .innerHtml = `<h1>ERREUR 404 :/</h1>`
+        console.log(err + " erreur 404")
     });
 
-// FUNCTION - AFFICHAGE DES ARTICLES SUR L'INDEX.HTML
+// FUNCTION - AFFICHAGE DES ARTICLES SUR L'INDEX
 function products(index) {
-    const sectionItems = document
-        .querySelector("#items");
+    const sectionItems = document.querySelector("#items");
     // BOUCLE POUR RÉCUPÉRATION DE CHAQUE ARTICLE
     for (let article of index) {
         sectionItems.innerHTML += `<a href="./product.html?_id=${article._id}">
-                <article>
-                    <img src="${article.imageUrl}" alt="${article.altTxt}">
-                    <h3 class="productName">${article.name}</h3>
-                    <p class="productDescription">${article.description}</p>
-                </article>
-            </a>`;
-
+        <article>
+            <img src="${article.imageUrl}" alt="${article.altTxt}">
+            <h3 class="productName">${article.name}</h3>
+            <p class="productDescription">${article.description}</p>
+        </article>
+    </a>`;
     }
 }
-

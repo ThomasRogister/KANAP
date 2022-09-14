@@ -1,85 +1,93 @@
-//la variable params récupère l'url de la page   
+
+// const "params" permet de récupérer les données l'url de la page
 const params = new URLSearchParams(document.location.search);
-// la variable id va récupérer la valeur du paramètre _id
+
+// const "id" permet de récupérer la valeur de la clef "_id"
 const id = params.get("_id");
-// On Affiche la valeur de id dans la console
+
+// affichage de "id" dans la console
 console.log(id);
 
-//  RÉCUPÉRATION DES PRODUITS DEPUIS L'API
-fetch("http://localhost:3000/api/products")
-    // DEMANDE DE RECEVOIR LA REPONSE EN J.SON
+
+// recuperation des produits depuis l'api 
+fetch(`http://localhost:3000/api/products/${id}`)
+    // demande de retour réponse en json
     .then((res) => res.json())
+    // réponse sera appelé objetArticles
     .then((objetArticles) => {
-        products(objetArticles);
+        // appel de la function "products" pour l'affichage des produits
+        product(objetArticles)
     })
 
-    // AFFICHAGE D'UN MESSAGE EN CAS D'ERREUR
+    // affichage message en cas d'erreur
     .catch((err) => {
-        document
-            .querySelector(".item")
-            .innerHTML = "<h1> Ce site est en maintenance,</<br> nous nous excusons pour la gêne occasionné.</h1>";
-        console.log(err);
-
+        document.querySelector(".item")
+            .innerHtml = "ERREUR 404 :/";
+        console.log(err)
     });
 
-
-
-// FUNCTION - AFFICHAGE PRODUIT
-function products(products) {
-    // DECLARATION DES VARIABLE DES DIFFERENTS ELEMENTS
+// function pour l'affichage des produits
+function product(product) {
+    // variables des différents éléments des produits
     let image = document.querySelector(".item__img");
     let title = document.querySelector("#title");
     let price = document.querySelector("#price");
-    let description = document.querySelector("#description");
     let colorOption = document.querySelector("#colors");
-    // BOUCLE RECHERCHE CHOIX DE L'ARTICLE
-    const product = products.find(p => p._id === id);
+    let description = document.querySelector("#description");
+
     console.log(product)
     if (product) {
-        image.innerHTML = `<img src="${product.imageUrl}"alt="${product.altTxt}">`;
+        image.innerHTML = `<img src="${product.imageUrl}" alt="${product.altTxt}">`;
         title.textContent = `${product.name}`;
         price.textContent = `${product.price}`;
         description.textContent = `${product.description}`;
-        // BOUCLE RECHERCHE DES COULEURS POUR CHAQUE PRODUIT
+        //boucle de recherche de couleurs du produit
         for (let color of product.colors) {
             colorOption.innerHTML += `<option value="${color}">${color}</option>`;
-
-
         }
     }
 }
+
+//déclaration variable "articleClient " (choix du produit)
 let articleClient = {};
 articleClient._id = id;
 
-
-let colorChoice = document.querySelector("#colors");
-colorChoice.addEventListener("input", (ec) => {
-    let colorProduct;
-    // RECUPERATION DE VALUE DE LA CIBLE(target) DANS (ec)-#colors
-    colorProduct = ec.target.value;
-    // AJOUT DE LA COULEUR A OBJET PANIER CLIENT
-    articleClient.color = colorProduct;
-    //  RESET COULEUR ET TEXTE SI ACTION SUR LES INPUTS => COMMANDE DU MÊME ARTICLE
+function enableCart() {
     document.querySelector("#addToCart").style.color = "white";
     document.querySelector("#addToCart").textContent = "Ajouter au panier";
+}
+
+
+//déclaration variable pour les choix de  couleurs 
+let colorChoice = document.querySelector("#colors");
+colorChoice.addEventListener("input", (ec) => {
+    // déclarartion variable "colorProduct" pour le choix de la couleur
+    let colorProduct;
+    //récupération de valeur(value) de la cible (target) dans (ec) #color
+    colorProduct = ec.target.value;
+    //ajout de la couleur dans objet panier
+    articleClient.color = colorProduct;
+    //reset couleur et texte si il y a une actions sur les inputs 
+    enableCart()
     console.log(colorProduct);
 });
 
+//déclaration variable pour le choix de quantité
+let quantityProduct;
 let quantityChoice = document.querySelector('input[id="quantity"]');
-let productQuantity;
 quantityChoice.addEventListener("input", (eq) => {
-    productQuantity = eq.target.value;
-    // AJOUT QUANTITE => OBJET PANIER CLIENT
-    articleClient.quantity = productQuantity;
-    //  RESET COULEUR ET TEXTE SI ACTION SUR LES INPUTS => COMMANDE DU MÊME ARTICLE
-    document.querySelector("#addToCart").style.color = "white";
-    document.querySelector("#addToCart").textContent = "Ajouter au panier";
-    console.log(productQuantity);
+    //déclarartion variable "quantityProduct" pour le choix de quantité
+    quantityProduct = eq.target.value;
+    //la quantité de l'article correpsond à la nouvelle quantité
+    articleClient.quantity = quantityProduct;
+    enableCart()
+    console.log(quantityProduct);
 })
 
-
-// CONDITION DE VALIDATION BTN "ajouter au panier"
+//condition de validation button pour ajouter au panier
+//déclaration variable pour aller chercher l'élément (querySelector) 
 let productChoice = document.querySelector("#addToCart");
+//et écouter l'élément (addEventListener) au 'click'
 productChoice.addEventListener("click", () => {
     if (
         articleClient.quantity < 1 ||
@@ -87,73 +95,72 @@ productChoice.addEventListener("click", () => {
         articleClient.quantity === undefined ||
         articleClient.color === "" ||
         articleClient.color === undefined
-
     ) {
-        // MESSAGE ALERTE
-        alert("Veuillez renseigner une couleur et une quantité");
+        // si les condition si dessus sont exact alors, le message d'alerte s'affiche
+        alert("Veuillez renseigner une quantité et une couleur.");
+
     } else {
-        console.log("validation effectué");
-        document.querySelector("#addToCart").textContent = "Dans le panier!";
+        // sinon un message dans l'élément "addToCart" (textContent) s'affiche
+        console.log("validation ok");
+        document.querySelector("#addToCart").textContent = "Le kanap est dans le panier!";
+        // et on appel la function addNewArticle qui permet d'ajouter un nouvel article au panier
         addNewProduct(articleClient);
     }
 });
 
-// DECLARATION DES VARIABLES TABLEAUX
-// 1ER TABLEAU => INITIALISATION DU PANIER
-let productChoiceClient = [];
-// RECUPERATION DU LOCALSTORAGE EN JSON
-let productStored = [];
-// CHOIX ARTICLE NON PRESENT DANS LOCALSTORAGE
-let productTemporary = [];
-// TABLEAU "productStored + productTemporary"
-let productToPush = [];
 
-function firstProduct() {
-    console.log(productStored);
-    if (productStored === null) {
-        productChoiceClient.push(articleClient);
-        console.log(articleClient);
-        return (localStorage.storedBasket = JSON.stringify(productChoiseClient));
+function productStored(storedBasket) {
+    const storage = localStorage.getItem(storedBasket);
+    if (!storage) {
+        return null;
+    } else {
+        return JSON.parse(storage);
     }
 }
-
-
 
 function addNewProduct(articleClient) {
-    const productStored = localStorage.getItem("storedBasket");
+    let productStored = localStorage.getItem("storedBasket");
     if (!productStored) {
-        const productToPush = [articleClient];
-        localStorage.setItem("storedBasket", JSON.stringify(productToPush));
+        localStorage.setItem("storedBasket", JSON.stringify([]));
+        productStored = localStorage.getItem("storedBasket");
     }
-    else {
-        const productTemporary = JSON.parse(productStored);
-        if (productTemporary.find(i => articleClient.color === i.color && articleClient._id === i._id)) {
-            alert("article deja choisi.")
-        }
-        const newProducts = [...productTemporary, articleClient];
-        localStorage.setItem("storedBasket", JSON.stringify(newProducts));
+    const cartJSON = JSON.parse(productStored);
+    if (cartJSON.find(i => articleClient._id === i._id && articleClient.color === i.color)) {
+        alert("article déjà choisi.");
+        const productIndex = cartJSON.findIndex(i => articleClient._id === i._id && articleClient.color === i.color)
+        console.log(productIndex)
+        const addQuantity = parseInt(articleClient.quantity) + parseInt(cartJSON[productIndex].quantity);
+        cartJSON[productIndex].quantity = addQuantity
+        localStorage.setItem("storedBasket", JSON.stringify(cartJSON));
+
+    } else {
+        const newProduct = [...cartJSON, articleClient];
+        localStorage.setItem("storedBasket", JSON.stringify(newProduct));
+
     }
 }
 
 
-function basket() {
 
-    productStored = JSON.parse(localStorage.getItem("storedBasket"));
-    if (productStored) {
-        for (let choice of productStored) {
-            if (choice.id === id && choice.color === articleClient.color) {
-                alert("Article déja choisit.");
-                let addQuantity = parseInt(choice.quantity) + parseInt(productQuantity);
-                // RESULTAT +> JSON
-                choice.quantity = JSON.stringify(addQuantity);
-                // RENVOIT NEW "storedBasket" => LOCALSTORAGE
-                return (localStorage.storedBasket = JSON.stringify(productStored));
-            }
-        }
-        // SI RETOUR DE LA BOUCLE = RIEN
-        return addNewProduct();
-    }
-    // SI ARTICLE N'EXISTE PAS
-    return firstProduct();
 
-}
+//********************************************************************************** */
+// function Pierre
+
+
+// function getLocalStorage(key) {
+//     const storage = localStorage.getItem(key);
+//     if (!storage) {
+//         return null;
+//     } else {
+//         return JSON.parse(storage);
+//     }
+// }
+
+// function myBeautifulFunction(...) {
+//     const storage = getLocalStorage("basket");
+//     if (storage) {
+//         ...
+//     }
+// }
+//************************************************************************************** */
+
