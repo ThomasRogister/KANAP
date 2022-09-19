@@ -103,11 +103,11 @@ const lettersRegex = new RegExp('^[a-zA-Z ,.-]+[-a-zA-Zàâäéèêëïîôöù�
 const addressRegex = new RegExp('^[0-9]{1,3}[,. ]{1}[-a-zA-Zàâäéèêëïîôöùûüç ]{5,100}$');
 
 
-function validInput(regex, champ, valismsg, invalidemsg) {
+function validInput(regex, champ, validesmsg, invalidemsg) {
   champ.addEventListener("change", () => {
     let msg = champ.nextElementSibling;
     if (regex.test(champ.value)) {
-      msg.textContent = valismsg;
+      msg.textContent = validesmsg;
     } else {
       msg.textContent = invalidemsg;
     }
