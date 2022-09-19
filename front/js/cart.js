@@ -23,7 +23,7 @@ if (basket.match("cart")) {
 } else {
   console.log("page confirmation");
 }
-
+// function pour afficher le/les article(s) dans la page panier
 function displayCartItem(article, objectArticles) {
   const result = objectArticles.find(p => p._id === article._id);
 
@@ -61,7 +61,7 @@ function removeProduct(id) {
   location.reload();
 }
 
-
+// function pour afficher la somme des prix et de la quantité des articles
 function showPriceAndQuantity(listLocalStorage, objectArticles) {
   let totalQuantity = 0;
   let totalPrice = 0;
@@ -82,8 +82,10 @@ function showPriceAndQuantity(listLocalStorage, objectArticles) {
 function showBasket(objectArticles) {
   // ON RECUP PANIER EN JSON
   const basket = localStorage.getItem("storedBasket");
+  // si le panier est vide un msg H1 s'affiche
   if (!basket) {
     document.querySelector("#cart__items").innerHTML = "<h1>panier vide</h1>";
+    //sinon les articles s'ajoutent à la page panier
   } else {
     const basketItems = JSON.parse(basket);
     basketItems.map(p => displayCartItem(p, objectArticles));
@@ -91,10 +93,7 @@ function showBasket(objectArticles) {
   }
 }
 
-
-// *****************************************Validation du formulaire***************************************************
-// ********************************************************************************************************************
-
+// pour la validation du formulaire et la requête POST
 
 // Initialisation des RegExp
 let form = document.querySelector(".cart__order__form");
@@ -102,7 +101,7 @@ const emailRegex = new RegExp('^[a-zA-Z0-9._-]+[@]{1}[a-zA-Z0-9._-]+[.]{1}[a-z]{
 const lettersRegex = new RegExp('^[a-zA-Z ,.-]+[-a-zA-Zàâäéèêëïîôöùûüç ]+$');
 const addressRegex = new RegExp('^[0-9]{1,3}[,. ]{1}[-a-zA-Zàâäéèêëïîôöùûüç ]{5,100}$');
 
-
+// function pour la validation ou non des champs du formulaire 
 function validInput(regex, champ, validesmsg, invalidemsg) {
   champ.addEventListener("change", () => {
     let msg = champ.nextElementSibling;
@@ -116,18 +115,21 @@ function validInput(regex, champ, validesmsg, invalidemsg) {
 
 validInput(lettersRegex, form.firstName, "prénom valide", "prénom invalide")
 validInput(lettersRegex, form.lastName, "nom valide", "nom invalide")
-// validInput(lettersRegex, form.firstName, "prénom valide", "prénom invalide")
-// validInput(lettersRegex, form.firstName, "prénom valide", "prénom invalide")
+validInput(addressRegex, form.adress, "adreese valide", "adreese invalide")
+validInput(lettersRegex, form.city, "ville valide", "ville invalide")
+validInput(emailRegex, form.email, "email valide", "email invalide")
 
 
 document.getElementById("order").addEventListener("click", (event) => {
   event.preventDefault();
+  // si les infos de tous les champs sont valide, alors on peut passer la commande
   if (lettersRegex.test(form.firstName.value) &&
     lettersRegex.test(form.lastName.value) &&
     addressRegex.test(form.address.value) &&
     lettersRegex.test(form.city.value) &&
     emailRegex.test(form.email.value)) {
     const basket = JSON.parse(localStorage.getItem("storedBasket"))
+    // on créé l'objet "d"ata" contenant les infos du client
     const data = {
       contact: {
         firstName: form.firstName.value,
@@ -139,8 +141,8 @@ document.getElementById("order").addEventListener("click", (event) => {
       products: basket.map(function (product) {
         return product._id
       })
-
     }
+    // requête API "POST" pour envoyer l'objet "data" au serveur 
     console.log(data)
     fetch("http://localhost:3000/api/products/order", {
       method: 'POST', // or 'PUT'
@@ -149,8 +151,10 @@ document.getElementById("order").addEventListener("click", (event) => {
       },
       body: JSON.stringify(data),
     })
+      // on récupère la response en Json 
       .then((res) => res.json())
       .then((response) => {
+        // on demande que "orderId" soit afficher dans l'URL de la page confirmation
         window.location = '/front/html/confirmation.html?orderId=' + response.orderId;
         console.log(response)
       })
@@ -163,7 +167,7 @@ document.getElementById("order").addEventListener("click", (event) => {
         console.log(err);
 
       });
-
+    // sinon on indique au client qu'il doit remplir correctement tous les champs du formulaire
   } else {
     alert("veuillez remplir tous les champs")
   }
