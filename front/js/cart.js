@@ -6,6 +6,13 @@ const basket = document.location.href;
 //  RÉCUPÉRATION DES PRODUITS DEPUIS L'API SI ON EST SUR LA PAGE PANIER
 if (basket.match("cart")) {
 
+  fetchProducts()
+
+} else {
+  console.log("page confirmation");
+}
+
+function fetchProducts() {
   fetch("http://localhost:3000/api/products")
     // on transforme LA REPONSE EN J.SON
     .then((res) => res.json())
@@ -22,8 +29,6 @@ if (basket.match("cart")) {
       console.log(err);
 
     });
-} else {
-  console.log("page confirmation");
 }
 
 // function pour inserer HTML dans le DOM de la page panier
@@ -44,7 +49,7 @@ function displayCartItem(article, objectArticles) {
       <div class="cart__item__content__settings">
         <div class="cart__item__content__settings__quantity">
           <p>Qté : </p>
-          <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" onchange="changeQuantity(this.value, "${article._id}")" value="${article.quantity}">
+          <input type="number" class="itemQuantity" name="itemQuantity" min="0" max="100" onchange="changeQuantity(this.value, '${article._id}', '${article.color}')" value="${article.quantity}">
         </div>
         <div id="delete" onclick="removeProduct('${article._id}')" class="cart__item__content__settings__delete">
           <p class="deleteItem">Supprimer</p>
@@ -65,36 +70,31 @@ function displayCartItem(article, objectArticles) {
 // on doit le renvoyer dans le localStorage - "storedBasket"
 
 
-
-function changeQuantity(value, id) {
+function changeQuantity(value, id, color) {
   const basket = localStorage.getItem("storedBasket");
   const cartJSON = JSON.parse(basket);
   // si un article correspond à l'article rechercher avec "find",  un message d'alert s'affiche et on ajoute la nouvelle quantité du produit contenu dans le panier du localStorage
-  cartJSON.find(p => article._id === p._id && article.color === p.color)
-  if (!value) {
+  if (value <= 0) {
     removeProduct(id)
   } else {
-    const productIndex = cartJSON.findIndex(p => article._id === p._id && article.color === p.color)
+    const productIndex = cartJSON.findIndex(p => id === p._id && color === p.color)
     console.log(productIndex)
-    const addQuantity = parseInt(article.quantity) + parseInt(cartJSON[productIndex].quantity);
-    cartJSON[productIndex].quantity = addQuantity
+    cartJSON[productIndex].quantity = value;
     localStorage.setItem("storedBasket", JSON.stringify(cartJSON));
+    fetchProducts();
   }
 }
 
-
-
-
-
-
 // Supprimer article du panier
 function removeProduct(id) {
-  alert('voulez-vous vraiment supprimer cer article?');
-  const recupBasket = localStorage.getItem("storedBasket");
-  const basketItems = JSON.parse(recupBasket);
-  const newBasket = basketItems.filter(p => p._id !== id);
-  localStorage.setItem("storedBasket", JSON.stringify(newBasket));
-  location.reload();
+  if (confirm("voulez-vous vraiment supprimer cet article?") == true) {
+    const recupBasket = localStorage.getItem("storedBasket");
+    const basketItems = JSON.parse(recupBasket);
+    const newBasket = basketItems.filter(p => p._id !== id);
+    localStorage.setItem("storedBasket", JSON.stringify(newBasket));
+    location.reload();
+  } else {
+  }
 }
 
 // function pour afficher la somme des prix et de la quantité des articles
@@ -123,6 +123,7 @@ function showBasket(objectArticles) {
     document.querySelector("#cart__items").innerHTML = "<h1>panier vide</h1>";
     //sinon les articles s'ajoutent à la page panier
   } else {
+    document.querySelector("#cart__items").innerHTML = "";
     // on transforme le contenu de "basket" en JSON
     const basketItems = JSON.parse(basket);
     basketItems.map(p => displayCartItem(p, objectArticles));
