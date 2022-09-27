@@ -1,5 +1,6 @@
 
-// const "params" permet de récupérer les données l'url de la page
+// URLsearchParams créé un objet pour avoir plus facilement accès au données récup par document.location.search
+// - (document.location.search) permet de récupérer les données l'url de la page après "?""
 const params = new URLSearchParams(document.location.search);
 
 // const "id" permet de récupérer la valeur de la clef "_id"
@@ -9,13 +10,13 @@ const id = params.get("_id");
 console.log(id);
 
 
-// recuperation des produits depuis l'api 
+// recuperation du produit via son id depuis l'API
 fetch(`http://localhost:3000/api/products/${id}`)
-    // demande de retour réponse en json
+    // transforme la réponse en json
     .then((res) => res.json())
     // réponse sera appelé objetArticles
     .then((objetArticles) => {
-        // appel de la function "products" pour l'affichage des produits
+        // appel de la function "product" pour l'affichage du produit concerné
         product(objetArticles)
     })
 
@@ -26,9 +27,9 @@ fetch(`http://localhost:3000/api/products/${id}`)
         console.log(err)
     });
 
-// function pour l'affichage des produits
+// function pour l'affichage du produit concerné
 function product(product) {
-    // variables des différents éléments des produits
+    // variables des différents éléments du produit concerné
     let image = document.querySelector(".item__img");
     let title = document.querySelector("#title");
     let price = document.querySelector("#price");
@@ -41,14 +42,14 @@ function product(product) {
         title.textContent = `${product.name}`;
         price.textContent = `${product.price}`;
         description.textContent = `${product.description}`;
-        //boucle de recherche de couleurs du produit
+        // insertion des differentes options de couleur dans le HTML
         for (let color of product.colors) {
             colorOption.innerHTML += `<option value="${color}">${color}</option>`;
         }
     }
 }
 
-//déclaration variable "articleClient " (choix du produit)
+//déclaration variable "articleClient " (choix du produit) - selon le choix de l'aticle et de ses options (couleur et quantité)
 let articleClient = {};
 articleClient._id = id;
 
@@ -58,35 +59,31 @@ function enableCart() {
 }
 
 
-//déclaration variable pour les choix de  couleurs 
+// choix de la couleur 
 let colorChoice = document.querySelector("#colors");
 colorChoice.addEventListener("input", (ec) => {
-    // déclarartion variable "colorProduct" pour le choix de la couleur
-    let colorProduct;
-    //récupération de valeur(value) de la cible (target) dans (ec) #color
-    colorProduct = ec.target.value;
-    //ajout de la couleur dans objet panier
+    //récupération de valeur(value, nom de la couleur) de la cible (target) dans (ec) #color
+    let colorProduct = ec.target.value;
+    //ajout de la couleur dans objet articleClient
     articleClient.color = colorProduct;
-    //reset couleur et texte si il y a une actions sur les inputs 
+    //reset couleur et texte 
     enableCart()
-    console.log(colorProduct);
 });
 
-//déclaration variables pour le choix de quantité
-let quantityProduct;
+// choix de quantité
 let quantityChoice = document.querySelector('input[id="quantity"]');
 quantityChoice.addEventListener("input", (eq) => {
-    quantityProduct = eq.target.value;
-    //la quantité de l'article correpsond à la nouvelle quantité
+    let quantityProduct = eq.target.value;
+    //la quantité de l'article correpsond à la nouvelle quantité (mise à jour de la quantité)
     articleClient.quantity = quantityProduct;
+    //reset de la quantité
     enableCart()
-    console.log(quantityProduct);
 })
 
-//condition de validation button pour ajouter au panier
 let productChoice = document.querySelector("#addToCart");
-//et écouter l'élément (addEventListener) au 'click'
+// écouter l'élément (addEventListener) au 'click'
 productChoice.addEventListener("click", () => {
+    //condition de validation button pour ajouter au panier
     if (
         articleClient.quantity < 1 ||
         articleClient.quantity > 100 ||
@@ -98,7 +95,7 @@ productChoice.addEventListener("click", () => {
         alert("Veuillez renseigner une quantité et une couleur.");
 
     } else {
-        // sinon un message dans l'élément "addToCart" (textContent) s'affiche
+        // sinon un message dans l'élément "addToCart" ("Le kanap est dans le panier!") s'affiche
         console.log("validation ok");
         document.querySelector("#addToCart").textContent = "Le kanap est dans le panier!";
         // et on appel la function addNewArticle qui permet d'ajouter un nouvel article au panier
@@ -106,19 +103,7 @@ productChoice.addEventListener("click", () => {
     }
 });
 
-// function pour récupéré le contenu de storage si il contient au moins un article
-
-function productStored(storedBasket) {
-    const storage = localStorage.getItem(storedBasket);
-    if (!storage) {
-        return null;
-    } else {
-        return JSON.parse(storage);
-    }
-}
-
 // function pour ajouter un article (premier, nouveau ou déjà présent)
-
 function addNewProduct(articleClient) {
     let productStored = localStorage.getItem("storedBasket");
     // si productStored ne contient aucun article alors on créé un tableau storedBasket
@@ -127,7 +112,7 @@ function addNewProduct(articleClient) {
         productStored = localStorage.getItem("storedBasket");
     }
     const cartJSON = JSON.parse(productStored);
-    // si un article correspond à l'article rechercher avec "find",  un message d'alert s'affiche et on ajoute la nouvelle quantité à "articleClient"
+    // si un article correspond à l'article rechercher avec "find",  un message d'alert s'affiche et on ajoute la nouvelle quantité du produit contenu dans le panier du localStorage
     if (cartJSON.find(i => articleClient._id === i._id && articleClient.color === i.color)) {
         alert("article déjà choisi.");
         const productIndex = cartJSON.findIndex(i => articleClient._id === i._id && articleClient.color === i.color)
@@ -135,7 +120,7 @@ function addNewProduct(articleClient) {
         const addQuantity = parseInt(articleClient.quantity) + parseInt(cartJSON[productIndex].quantity);
         cartJSON[productIndex].quantity = addQuantity
         localStorage.setItem("storedBasket", JSON.stringify(cartJSON));
-        // sinon on ajoute l'article sans message d'alert dans l'objet articleClient
+        // sinon on ajoute l'article sans message d'alert dans le panier du localStorage
     } else {
         const newProduct = [...cartJSON, articleClient];
         localStorage.setItem("storedBasket", JSON.stringify(newProduct));

@@ -1,6 +1,6 @@
 //récupération des produits depuis l'api
 fetch("http://localhost:3000/api/products")
-    //demande de recevoir la reponse en JSON
+    // transformer la res. en JSON
     .then((res) => res.json())
     //la répnse(JSON) sera appelé "articles"
     .then((articles) => {
@@ -20,7 +20,7 @@ fetch("http://localhost:3000/api/products")
 // FUNCTION - AFFICHAGE DES ARTICLES SUR L'INDEX
 function products(index) {
     const sectionItems = document.querySelector("#items");
-    // BOUCLE POUR RÉCUPÉRATION DE CHAQUE ARTICLE
+    // BOUCLE POUR INSERTION DES PRODUIT EN HTML DANS LE BODY
     for (let article of index) {
         sectionItems.innerHTML += `<a href="./product.html?_id=${article._id}">
         <article>
