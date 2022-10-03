@@ -13,8 +13,8 @@ fetch("http://localhost:3000/api/products")
     .catch((err) => {
         document
             .querySelector("#items")
-            .innerHtml = `<h1>ERREUR 404 :/</h1>`
-        console.log(err + " erreur 404")
+            .innerHtml = `<h1> Problèmes réseaux =/ <br> veuillez réessayer plus tard :/</h1>`
+        console.log(err)
     });
 
 // FUNCTION - AFFICHAGE DES ARTICLES SUR L'INDEX

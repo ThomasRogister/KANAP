@@ -1,6 +1,6 @@
 
 // URLsearchParams créé un objet pour avoir plus facilement accès au données récup par document.location.search
-// - (document.location.search) permet de récupérer les données l'url de la page après "?""
+// - (document.location.search) permet de récupérer les données l'url de la page après "?"
 const params = new URLSearchParams(document.location.search);
 
 // const "id" permet de récupérer la valeur de la clef "_id"
@@ -23,7 +23,7 @@ fetch(`http://localhost:3000/api/products/${id}`)
     // affichage message en cas d'erreur
     .catch((err) => {
         document.querySelector(".item")
-            .innerHtml = "ERREUR 404 :/";
+            .innerHtml = "Problèmes réseaux =/ <br> veuillez réessayer plus tard";
         console.log(err)
     });
 

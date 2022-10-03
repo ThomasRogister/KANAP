@@ -1,6 +1,4 @@
-// document.addEventListener('DOMContentLoaded', () => {
-//   log.textContent += `DOMContentLoaded\n`;
-// });
+
 const basket = document.location.href;
 
 //  RÉCUPÉRATION DES PRODUITS DEPUIS L'API SI ON EST SUR LA PAGE PANIER
@@ -9,7 +7,7 @@ if (basket.match("cart")) {
   fetchProducts()
 
 } else {
-  console.log("page confirmation");
+  console.log("no matches found");
 }
 
 function fetchProducts() {
@@ -49,7 +47,8 @@ function displayCartItem(article, objectArticles) {
       <div class="cart__item__content__settings">
         <div class="cart__item__content__settings__quantity">
           <p>Qté : </p>
-          <input type="number" class="itemQuantity" name="itemQuantity" min="0" max="100" onchange="changeQuantity(this.value, '${article._id}', '${article.color}')" value="${article.quantity}">
+          <input type="number" class="itemQuantity" name="itemQuantity" min="0" max="100" 
+          onchange="changeQuantity(this.value, '${article._id}', '${article.color}')" value="${article.quantity}">
         </div>
         <div id="delete" onclick="removeProduct('${article._id}')" class="cart__item__content__settings__delete">
           <p class="deleteItem">Supprimer</p>
@@ -59,17 +58,9 @@ function displayCartItem(article, objectArticles) {
   </article>`);
 }
 
-// aller chercher le panier dans le localStorage -"storedBasket"
-// on cherche le produit avec filter 
-
-//IF le produit n'existe pas dans le panier:
-// Value === 0, alors on appelle la function remove product
-
-// ELSE le produit existe dans le panier:
-// lui ajouter un nouvelle quantité (value +1)
-// on doit le renvoyer dans le localStorage - "storedBasket"
 
 
+// fonction d'ajout d'une nouvelle quantité d'un produit depuis la page panier
 function changeQuantity(value, id, color) {
   const basket = localStorage.getItem("storedBasket");
   const cartJSON = JSON.parse(basket);
@@ -120,7 +111,7 @@ function showBasket(objectArticles) {
   const basket = localStorage.getItem("storedBasket");
   // si le panier est vide un msg H1 s'affiche
   if (!basket) {
-    document.querySelector("#cart__items").innerHTML = "<h1>panier vide</h1>";
+    document.querySelector("#cart__items").innerHTML = "<h1>votre panier est vide</h1>";
     //sinon les articles s'ajoutent à la page panier
   } else {
     document.querySelector("#cart__items").innerHTML = "";
@@ -208,62 +199,6 @@ document.getElementById("order").addEventListener("click", (event) => {
     alert("veuillez remplir tous les champs")
   }
 })
-
-// form.addEventListener("submit", (event) => {
-//   event.preventDefault();
-//   let form = document.querySelector(".cart__order__form");
-//   console.log(form)
-//   // si les infos de tous les champs sont valide, alors on peut passer la commande
-//   if (lettersRegex.test(form.firstName.value) &&
-//     lettersRegex.test(form.lastName.value) &&
-//     addressRegex.test(form.address.value) &&
-//     lettersRegex.test(form.city.value) &&
-//     emailRegex.test(form.email.value)) {
-//     const basket = JSON.parse(localStorage.getItem("storedBasket"));
-//     // on créé l'objet "data" contenant les infos du client  (objet construit pour l'envoi à l'API)
-//     const data = {
-//       contact: {
-//         firstName: form.firstName.value,
-//         lastName: form.lastName.value,
-//         address: form.address.value,
-//         city: form.city.value,
-//         email: form.email.value
-//       },
-//       products: basket.map(function (product) {
-//         return product._id
-//       })
-//     }
-//     // requête API "POST" pour envoyer l'objet "data" au serveur
-//     fetch("http://localhost:3000/api/products/order", {
-//       method: 'POST', // or 'PUT'
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify(data),
-//     })
-//       // on transforme la response en Json
-//       .then((res) => res.json())
-//       .then((response) => {
-//         // on demande que "orderId" soit afficher dans l'URL de la page confirmation
-//         // on fait une redirrection (avec windows.location) avec le paramètre orderId qui provient de la response du POST fait sur l'API
-//         window.location = 'confirmation.html?orderId=' + response.orderId;
-
-//       })
-
-//       // AFFICHAGE D'UN MESSAGE EN CAS D'ERREUR
-//       .catch((err) => {
-//         document
-//           .querySelector("#cartAndFormContainer")
-//           .innerHTML = "<h1> Cette page est en maintenance,</<br> nous nous excusons pour la gêne occasionné.</h1>";
-//         console.log(err);
-
-//       });
-//     // sinon on indique au client qu'il doit remplir correctement tous les champs du formulaire
-//   } else {
-//     alert("veuillez remplir tous les champs")
-//   }
-// })
-
 
 
 
