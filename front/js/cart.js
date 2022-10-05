@@ -151,7 +151,7 @@ validInput(emailRegex, form.email, "email valide", "email invalide")
 document.getElementById("order").addEventListener("click", (event) => {
   let form = document.getElementById("form_order");
   event.preventDefault();
-
+  // si toutes les condition sont true alors ont créé l'objet "data" contenant les infos du client
   if (lettersRegex.test(form.firstName.value) &&
     lettersRegex.test(form.lastName.value) &&
     addressRegex.test(form.address.value) &&
@@ -171,7 +171,7 @@ document.getElementById("order").addEventListener("click", (event) => {
       })
 
     }
-
+    // fetch à l'API - méthode POST - envoie data, réponse dans l'URL de la page confirmation
     console.log(data)
     fetch("http://localhost:3000/api/products/order", {
       method: 'POST', // or 'PUT'
