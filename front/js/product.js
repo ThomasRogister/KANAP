@@ -6,10 +6,6 @@ const params = new URLSearchParams(document.location.search);
 // const "id" permet de récupérer la valeur de la clef "_id"
 const id = params.get("_id");
 
-// affichage de "id" dans la console
-console.log(id);
-
-
 // recuperation du produit via son id depuis l'API
 fetch(`http://localhost:3000/api/products/${id}`)
     // transforme la réponse en json
@@ -24,7 +20,6 @@ fetch(`http://localhost:3000/api/products/${id}`)
     .catch((err) => {
         document.querySelector(".item")
             .innerHtml = "Problèmes réseaux =/ <br> veuillez réessayer plus tard";
-        console.log(err)
     });
 
 // function pour l'affichage du produit concerné
@@ -36,7 +31,6 @@ function product(product) {
     let colorOption = document.querySelector("#colors");
     let description = document.querySelector("#description");
 
-    console.log(product)
     if (product) {
         image.innerHTML = `<img src="${product.imageUrl}" alt="${product.altTxt}">`;
         title.textContent = `${product.name}`;

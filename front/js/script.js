@@ -4,7 +4,6 @@ fetch("http://localhost:3000/api/products")
     .then((res) => res.json())
     //la répnse(JSON) sera appelé "articles"
     .then((articles) => {
-        console.table(articles);
         // appel de la function d'affichage
         products(articles);
     })
@@ -14,7 +13,6 @@ fetch("http://localhost:3000/api/products")
         document
             .querySelector("#items")
             .innerHtml = `<h1> Problèmes réseaux =/ <br> veuillez réessayer plus tard :/</h1>`
-        console.log(err)
     });
 
 // FUNCTION - AFFICHAGE DES ARTICLES SUR L'INDEX

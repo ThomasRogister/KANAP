@@ -5,9 +5,6 @@ const basket = document.location.href;
 if (basket.match("cart")) {
 
   fetchProducts()
-
-} else {
-  console.log("no matches found");
 }
 
 function fetchProducts() {
@@ -15,7 +12,6 @@ function fetchProducts() {
     // on transforme LA REPONSE EN J.SON
     .then((res) => res.json())
     .then((objetArticles) => {
-      console.log(objetArticles)
       showBasket(objetArticles);
     })
 
@@ -24,8 +20,6 @@ function fetchProducts() {
       document
         .querySelector("#cartAndFormContainer")
         .innerHTML = "<h1> Cette page est en maintenance,</<br> nous nous excusons pour la gêne occasionné.</h1>";
-      console.log(err);
-
     });
 }
 
@@ -149,7 +143,7 @@ validInput(emailRegex, form.email, "email valide", "email invalide")
 
 document.getElementById("order").addEventListener("click", (event) => {
   let form = document.getElementById("form_order");
-  event.preventDefault();
+  // event.preventDefault();
   // si toutes les condition sont true alors ont créé l'objet "data" contenant les infos du client
   if (lettersRegex.test(form.firstName.value) &&
     lettersRegex.test(form.lastName.value) &&
@@ -171,7 +165,6 @@ document.getElementById("order").addEventListener("click", (event) => {
 
     }
     // fetch à l'API - méthode POST - envoie data, réponse dans l'URL de la page confirmation
-    console.log(data)
     fetch("http://localhost:3000/api/products/order", {
       method: 'POST', // or 'PUT'
       headers: {
@@ -182,7 +175,6 @@ document.getElementById("order").addEventListener("click", (event) => {
       .then((res) => res.json())
       .then((response) => {
         window.location = '/front/html/confirmation.html?orderId=' + response.orderId;
-        console.log(response)
       })
 
       // AFFICHAGE D'UN MESSAGE EN CAS D'ERREUR
@@ -190,8 +182,6 @@ document.getElementById("order").addEventListener("click", (event) => {
         document
           .querySelector("#cartAndFormContainer")
           .innerHTML = "<h1> Cette page est en maintenance,</<br> nous nous excusons pour la gêne occasionné.</h1>";
-        console.log(err);
-
       });
 
   } else {
