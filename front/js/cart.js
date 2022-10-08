@@ -64,12 +64,11 @@ function displayCartItem(article, objectArticles) {
 function changeQuantity(value, id, color) {
   const basket = localStorage.getItem("storedBasket");
   const cartJSON = JSON.parse(basket);
-  // si un article correspond à l'article rechercher avec "find",  un message d'alert s'affiche et on ajoute la nouvelle quantité du produit contenu dans le panier du localStorage
+  // si la quantité du produit est inférieure ou égale à zéro, on appel la fonction removeProduct
   if (value <= 0) {
     removeProduct(id)
   } else {
     const productIndex = cartJSON.findIndex(p => id === p._id && color === p.color)
-    console.log(productIndex)
     cartJSON[productIndex].quantity = value;
     localStorage.setItem("storedBasket", JSON.stringify(cartJSON));
     fetchProducts();
