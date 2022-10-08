@@ -66,7 +66,7 @@ colorChoice.addEventListener("input", (ec) => {
     let colorProduct = ec.target.value;
     //ajout de la couleur dans objet articleClient
     articleClient.color = colorProduct;
-    //reset couleur et texte 
+    //reset couleur et texte du bouton  
     enableCart()
 });
 
@@ -76,7 +76,7 @@ quantityChoice.addEventListener("input", (eq) => {
     let quantityProduct = eq.target.value;
     //la quantité de l'article correpsond à la nouvelle quantité (mise à jour de la quantité)
     articleClient.quantity = quantityProduct;
-    //reset de la quantité
+    //reset couleur et texte du bouton  
     enableCart()
 })
 
