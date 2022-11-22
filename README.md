@@ -1,12 +1,12 @@
-![](16450043954887_cover%20small.png)
-# "La Panthère" is the third project of the OpenClassrooms Dev Web courses.
-## In this project, he was asked to make an SEO improvement of a webdesign website
-![](home%20page%20la%20panthère.png)
+![](front/images/logo%20kanap.png)
+# Kanap is the fourth project of the OpenClassrooms Dev Web courses.
+## The mission was to build an e-commerce site using Java Script.
+![](pages%20kanap.png)
 
-### La Panthère is a webdesign website based in Lyon.
+### The client is a sofa brand that would like to have its sales platform in addition to its physical store.
 
 ---
-to basic project : https://openclassrooms.com/fr/paths/556/projects/638/assignment
+to basic project : https://openclassrooms.com/fr/paths/556/projects/675/assignment
 
 to OpenClassrooms : https://openclassrooms.com/fr/
 
