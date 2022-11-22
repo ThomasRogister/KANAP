@@ -1,4 +1,4 @@
-![](front/images/logo%20kanap.png)
+![](front/images/logo_kanap.png)
 # Kanap is the fourth project of the OpenClassrooms Dev Web courses.
 ## The mission was to build an e-commerce site using Java Script.
 ![](pages%20kanap.png)
